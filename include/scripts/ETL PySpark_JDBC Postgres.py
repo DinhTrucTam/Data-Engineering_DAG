@@ -17,6 +17,7 @@ def spark_session_initialization():
 
     return spark
 
+file_path_1 = "./include/source_data_manufacturing_2025-01-04.csv"
 def data_ingestion(spark):
     # Load dataset
     df = spark.read.csv(file_path_1, header=True, inferSchema=True)
@@ -48,17 +49,14 @@ def data_transformation(df):
 
     # Handle missing values
     numeric_columns = [c for c, t in df.dtypes if t in ('int', 'double')]
-
     # Replace negative values with NULL
     for column in numeric_columns:
         df = df.withColumn(column, when(col(column) < 0, None).otherwise(col(column)))
-
     # Handling Outliers using Z-score method
     for column in numeric_columns:
         stats = df.select(mean(col(column)).alias("mean"), stddev(col(column)).alias("stddev")).collect()
         mean_val = stats[0]["mean"]
         stddev_val = stats[0]["stddev"]
-
         if stddev_val is not None and stddev_val > 0.01:  # Adjust threshold
             df = df.withColumn(column, when((col(column) - lit(mean_val)) / lit(stddev_val) > 3, lit(None)).otherwise(col(column)))
 
