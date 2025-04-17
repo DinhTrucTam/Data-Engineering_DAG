@@ -3,7 +3,7 @@ from pyspark.sql.functions import col, when, mean, stddev, lit, round, to_timest
 from pyspark.sql.types import TimestampType
 import sys
 
-file_path_1 = "./include/source_data_manufacturing_2025-01-04.csv"
+file_path_1 = "./include/source_data_manufacturing_*.csv"
 file_path_2 = "./include/machine.csv"
 
 def spark_session_initialization():
@@ -17,7 +17,6 @@ def spark_session_initialization():
 
     return spark
 
-file_path_1 = "./include/source_data_manufacturing_2025-01-04.csv"
 def data_ingestion(spark):
     # Load dataset
     df = spark.read.csv(file_path_1, header=True, inferSchema=True)

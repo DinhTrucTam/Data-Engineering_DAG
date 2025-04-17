@@ -10,7 +10,7 @@ postgres_driver_jar = "/usr/local/airflow/include/postgresql-42.7.2.jar"
 with DAG(
     dag_id='DA_DAG',
     start_date=datetime(2024, 1, 1),
-    schedule=None,
+    schedule="0 12 * * *",  # Chạy mỗi ngày lúc 12:00 PM
     catchup=False,
 ) as dag:
     spark_job_load_postgres = SparkSubmitOperator(
@@ -21,6 +21,11 @@ with DAG(
         verbose=1,
         jars=postgres_driver_jar,
         driver_class_path=postgres_driver_jar,
+        conf={
+            "spark.executor.memory": "2g",
+            "spark.executor.cores": "2",
+            "spark.driver.memory": "1g"
+        },
         dag=dag
     )
     
