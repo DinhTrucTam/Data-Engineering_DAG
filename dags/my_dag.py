@@ -9,8 +9,8 @@ postgres_driver_jar = "/usr/local/airflow/include/postgresql-42.7.2.jar"
     
 with DAG(
     dag_id='DA_DAG',
-    start_date=datetime(2024, 1, 1),
-    schedule="0 12 * * *",  # Chạy mỗi ngày lúc 12:00 PM
+    start_date=datetime(2024, 4, 24),
+    schedule="25 16 * * *",  # Chạy mỗi ngày lúc 12:00 PM
     catchup=False,
 ) as dag:
     spark_job_load_postgres = SparkSubmitOperator(
